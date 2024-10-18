@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>וואלק דון פרד מלכנו</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .quiz-container {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+      color: #ffcc00;
+    }
+
+    .question {
+      margin: 15px 0;
+      font-size: 1.5rem;
+    }
+
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #ffcc00;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: black;
+    }
+
+    button:hover {
+      background-color: #fff;
+      color: #ffcc00;
+      box-shadow: 0 0 10px rgba(255, 255, 0, 0.7);
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="quiz-container">
+    <h1>וואלק דון פרד מלכנו</h1>
+    
+    <div id="quiz">
+      <!-- Questions will be dynamically inserted here -->
+    </div>
+
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    const questions = [
+      { question: "האם אני יא סלאם", answer: false },
+      { question: "האם אני עושה גלק כל היום", answer: true },
+      { question: "האם אני עושה מיואינג במקלחת", answer: true },
+      { question: "האם אני ומר אלול עושים אדג פארטי", answer: true },
+      { question: "האם אבמיפי ומ עושים גלק פארטי", answer: false }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    const quizDiv = document.getElementById('quiz');
+    const resultDiv = document.getElementById('result');
+
+    function loadQuestion() {
+      if (currentQuestion < questions.length) {
+        const q = questions[currentQuestion];
+        quizDiv.innerHTML = `
+          <div class="question">${q.question}</div>
+          <button onclick="answer(true)">נכון</button>
+          <button onclick="answer(false)">לא נכון</button>
+        `;
+      } else {
+        // Show final score
+        quizDiv.innerHTML = '';
+        resultDiv.innerHTML = `הניקוד שלך הוא: ${score} מתוך ${questions.length}`;
+      }
+    }
+
+    function answer(selectedAnswer) {
+      const correctAnswer = questions[currentQuestion].answer;
+
+      if (selectedAnswer === correctAnswer) {
+        score++;
+        alert("נכון!");
+      } else {
+        alert("טעות!");
+      }
+
+      currentQuestion++;
+      loadQuestion();
+    }
+
+    loadQuestion();
+  </script>
+
+</body>
+</html>
