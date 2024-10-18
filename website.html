@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun 2D Simulation</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            color: white;
+        }
+
+        h1 {
+            position: absolute;
+            top: 10px;
+            font-size: 3rem;
+            text-align: center;
+            width: 100%;
+            animation: text-glow 2s infinite;
+        }
+
+        canvas {
+            border: 3px solid white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+        }
+
+        .shape {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 204, 0, 0.7);
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(200px, 300px);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        @keyframes text-glow {
+            0% {
+                text-shadow: 0 0 10px white;
+            }
+
+            50% {
+                text-shadow: 0 0 20px cyan;
+            }
+
+            100% {
+                text-shadow: 0 0 10px white;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Fun 2D Animation</h1>
+
+    <!-- Ball Simulation -->
+    <canvas id="ballCanvas" width="800" height="600"></canvas>
+
+    <!-- Random Moving Shapes -->
+    <div class="shape" style="top: 50px; left: 100px;"></div>
+    <div class="shape" style="top: 200px; left: 300px;"></div>
+    <div class="shape" style="top: 400px; left: 500px;"></div>
+
+    <script>
+    const canvas = document.getElementById('ballCanvas');
+    const ctx = canvas.getContext('2d');
+    const gravity = 0.1;
+    let bounceFactor = -0.9;
+
+    // Ball object
+    let ball = {
+      x: 400,
+      y: 300,
+      radius: 15,
+      dx: 3,
+      dy: 3,
+      color: '#ffcc00'
+    };
+
+    // Array to hold the trail effect
+    let trail = [];
+
+    // Function to draw the ball
+    function drawBall() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw trail
+      for (let i = 0; i < trail.length; i++) {
+        ctx.beginPath();
+        ctx.arc(trail[i].x, trail[i].y, ball.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 204, 0, ${0.1 + i / trail.length})`;
+        ctx.fill();
+        ctx.closePath();
+      }
+
+      // Draw ball
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+      ctx.fillStyle = ball.color;
+      ctx.fill();
+      ctx.closePath();
+
+      // Update ball position
+      ball.dy += gravity;
+      ball.x += ball.dx;
+      ball.y += ball.dy;
+
+      // Collision detection with walls
+      if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
+        ball.dy *= bounceFactor;
+      }
+
+      if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+        ball.dx *= bounceFactor;
+      }
+
+      // Add trail effect
+      trail.push({ x: ball.x, y: ball.y });
+      if (trail.length > 10) trail.shift();
+
+      // Keep animating
+      requestAnimationFrame(drawBall);
+    }
+
+    // Start animation
+    drawBall();
+    </script>
+
+</body>
+</html>
